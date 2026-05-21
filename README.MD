@@ -1,8 +1,8 @@
 # LeetCode C++ Solutions
 
 This repo contains small, standalone C++ projects for LeetCode-style problem
-solving. Each problem directory under `code/` owns its own CMake project,
-debug app, solution headers, and GoogleTest suite.
+solving. Each problem directory under a `code/<topic>/` folder owns its own
+CMake project, debug app, solution headers, and GoogleTest suite.
 
 The `code/` directory itself is shared infrastructure, not an aggregate CMake
 project. Open, configure, build, and test one problem folder at a time.
@@ -20,24 +20,27 @@ code/
   templates/
     problem_project/
   test_cmake/
-  Problem_0001_Easy_Two_Sum/
-    .vscode/
-    CMakeLists.txt
-    include/
-      solution.h
-      solution_brute_force.h
-      solution_optimal.h
-      solutions.h
-    src/main.cpp
-    tests/tests.cpp
+  01_Arrays_Strings_and_Hashing/
+    Problem_0001_Easy_Two_Sum/
+      .vscode/
+      CMakeLists.txt
+      include/
+        solution.h
+        solution_brute_force.h
+        solution_optimal.h
+        solutions.h
+      src/main.cpp
+      tests/tests.cpp
 ```
 
-Each problem remains independent. Shared CMake code is discovered by walking
-upward from the problem folder until `code/AlgoProjectOptions.cmake` is found.
+The topic folders mirror the 65-topic course organization. Each problem remains
+independent. Shared CMake code is discovered by walking upward from the problem
+folder until `code/AlgoProjectOptions.cmake` is found.
 
 ## Build And Test One Problem
 
-From a problem directory, for example `code/Problem_0001_Easy_Two_Sum`:
+From a problem directory, for example
+`code/01_Arrays_Strings_and_Hashing/Problem_0001_Easy_Two_Sum`:
 
 ```bash
 cmake -S . -B build -G Ninja
@@ -102,8 +105,9 @@ registered variant. Slow brute-force variants skip stress-shaped tests.
 
 ## Adding A Problem
 
-Copy `code/templates/problem_project/` into `code/`, rename the folder, replace
-all placeholders, and keep the same standalone CMake structure.
+Copy `code/templates/problem_project/` into the appropriate `code/<topic>/`
+folder, rename the folder, replace all placeholders, and keep the same
+standalone CMake structure.
 
 Do not add a root-level aggregate `CMakeLists.txt` just to build every problem.
 For broad validation, iterate over the standalone problem folders.
