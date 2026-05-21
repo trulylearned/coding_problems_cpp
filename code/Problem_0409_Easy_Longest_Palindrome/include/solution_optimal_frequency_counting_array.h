@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 #include <array>
 #include <numeric>
+
+namespace optimal_frequency_counting_array_solution {
 
 class Solution {
 public:
@@ -46,3 +49,9 @@ public:
         return length;
     }
 };
+
+}  // namespace optimal_frequency_counting_array_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_frequency_counting_array_solution::Solution;
+#endif

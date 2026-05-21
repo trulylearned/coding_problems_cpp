@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
+
+namespace optimal_two_pointer_after_sorting_solution {
 
 class Solution {
 public:
@@ -79,3 +82,9 @@ public:
         return result;
     }
 };
+
+}  // namespace optimal_two_pointer_after_sorting_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_two_pointer_after_sorting_solution::Solution;
+#endif

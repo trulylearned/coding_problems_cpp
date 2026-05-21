@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 #include <unordered_set>
 #include <algorithm> // for std::max
+
+namespace brute_force_optimized_expanding_window_solution {
 
 class Solution {
 public:
@@ -37,3 +40,9 @@ public:
         return max_length;
     }
 };
+
+}  // namespace brute_force_optimized_expanding_window_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_optimized_expanding_window_solution::Solution;
+#endif

@@ -1,52 +1,79 @@
-#include "solution.h" // Or "solution.h"
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <string_view>
+#include <vector>
 
-// To build and run with this main:
-// 1. Make sure your solution is in "solution.h" or "solution.h"
-// 2. Compile: g++ -std=c++23 -o main main.cpp
-// 3. Run: ./main
-//
-// To run tests (if you have GoogleTest setup):
-// 1) CMake: Configure
-// 2) CMake: Build
-// 3) CTest: Run Tests
-// or from terminal: ctest --output-on-failure
+namespace {
 
-void print_groups(const std::vector<std::vector<std::string>>& groups) {
-    std::cout << "Found " << groups.size() << " groups:\n";
-    for (const auto& group : groups) {
-        std::cout << "[ ";
-        for (const auto& word : group) {
-            std::cout << "\"" << word << "\" ";
-        }
-        std::cout << "]\n";
-    }
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
 }
 
-int main() {
-    // Solution solution;
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
 
-    // // --- Example 1 ---
-    // std::vector<std::string> strs1 = {"eat","tea","tan","ate","nat","bat"};
-    // std::cout << "--- Running Example 1 --- \n";
-    // auto groups1 = solution.groupAnagrams(strs1);
-    // print_groups(groups1);
-    
-    /*
-    // --- Example 2 ---
-    std::vector<std::string> strs2 = {"abc", "bca", "xyz", "zyx"};
-    std::cout << "\n--- Running Example 2 --- \n";
-    auto groups2 = solution.groupAnagrams(strs2);
-    print_groups(groups2);
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
 
-    // --- Example 3 (Edge Case) ---
-    std::vector<std::string> strs3 = {"", "a", ""};
-    std::cout << "\n--- Running Example 3 --- \n";
-    auto groups3 = solution.groupAnagrams(strs3);
-    print_groups(groups3);
-    */
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
 
-    return 0;
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
+        }
+        print_value(values[i]);
+    }
+    std::cout << ']';
+}
+
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
+
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        std::vector<std::string> strs {"eat", "tea", "tan", "ate", "nat", "bat"};
+        const auto result = solution.groupAnagrams(strs);
+        std::cout << "strs = ";
+        print_value(strs);
+        std::cout << "\ngroups = ";
+        print_value(result);
+        std::cout << "\n";
+    });
 }

@@ -1,3 +1,55 @@
+# Repo-local generated files and machine-local state
+enc_temp_folder
+/_tmp/
+
+# macOS Finder metadata
+.DS_Store
+**/.DS_Store
+
+# Editor and IDE state that should remain machine-local
+.idea/
+.vscode/settings.json
+**/.vscode/settings.json
+**/.vscode/ipch/
+
+# CMake/Ninja/CTest generated files.
+# Keep normal builds under a per-project build/ directory, but also ignore
+# accidental in-source generated files so Git stays clean if a command fails.
+**/build/
+**/out/
+**/cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+DartConfiguration.tcl
+Testing/
+install_manifest.txt
+compile_commands.json
+build.ninja
+rules.ninja
+.ninja_deps
+.ninja_log
+
+# C/C++ compiler, linker, debug, coverage, and profiling outputs
+*.o
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.dSYM/
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+
 enc_temp_folder
 
 # Created by https://www.gitignore.io/api/visualstudio

@@ -1,7 +1,11 @@
 #pragma once
-// IMPORTANT: Include all necessary modules for this specific solution here.
+
 #include <vector>
 #include <utility>
+
+namespace brute_force_solution {
+
+// IMPORTANT: Include all necessary modules for this specific solution here.
 
 class Solution {
 private:
@@ -39,3 +43,9 @@ public:
         }
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

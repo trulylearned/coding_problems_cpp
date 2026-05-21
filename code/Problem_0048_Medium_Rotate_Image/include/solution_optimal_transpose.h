@@ -1,8 +1,12 @@
 #pragma once
-// IMPORTANT: Include all necessary modules for this specific solution here.
+
 #include <vector>
 #include <algorithm> // For std::reverse
 #include <utility>   // For std::swap
+
+namespace optimal_transpose_solution {
+
+// IMPORTANT: Include all necessary modules for this specific solution here.
 
 class Solution {
 private:
@@ -36,3 +40,9 @@ public:
         }
     }
 };
+
+}  // namespace optimal_transpose_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_transpose_solution::Solution;
+#endif

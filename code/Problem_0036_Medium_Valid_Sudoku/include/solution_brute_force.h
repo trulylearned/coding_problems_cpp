@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <unordered_set>
+
+namespace brute_force_solution {
 
 class Solution {
 private:
@@ -62,3 +65,9 @@ public:
         return true;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

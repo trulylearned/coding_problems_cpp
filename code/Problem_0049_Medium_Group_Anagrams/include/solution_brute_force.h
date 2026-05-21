@@ -1,8 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <vector>
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -48,3 +50,9 @@ public:
         return result;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

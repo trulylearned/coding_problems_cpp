@@ -1,0 +1,23 @@
+#pragma once
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+#define ALGO_RESTORE_GLOBAL_SOLUTION_ALIAS_SUPPRESSION
+#define ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+#endif
+
+#include "solution_optimal.h"
+
+#ifdef ALGO_RESTORE_GLOBAL_SOLUTION_ALIAS_SUPPRESSION
+#undef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+#undef ALGO_RESTORE_GLOBAL_SOLUTION_ALIAS_SUPPRESSION
+#endif
+
+namespace default_solution {
+
+using {{SOLUTION_CLASS_NAME}} = optimal_solution::{{SOLUTION_CLASS_NAME}};
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using {{SOLUTION_CLASS_NAME}} = default_solution::{{SOLUTION_CLASS_NAME}};
+#endif

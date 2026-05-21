@@ -1,5 +1,8 @@
 #pragma once
+
 #include <vector>
+
+namespace optimal_solution {
 
 class Solution {
 public:
@@ -51,3 +54,9 @@ public:
         return -1;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif

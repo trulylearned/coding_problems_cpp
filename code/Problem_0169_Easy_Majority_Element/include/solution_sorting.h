@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
+
+namespace sorting_solution {
 
 class Solution {
 public:
@@ -16,3 +19,9 @@ public:
         return nums[nums.size() / 2];
     }
 };
+
+}  // namespace sorting_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = sorting_solution::Solution;
+#endif

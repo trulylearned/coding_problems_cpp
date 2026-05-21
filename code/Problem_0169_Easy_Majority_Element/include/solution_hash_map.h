@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <unordered_map>
+
+namespace hash_map_solution {
 
 class Solution {
 public:
@@ -25,3 +28,9 @@ public:
         return -1; // Should not be reached.
     }
 };
+
+}  // namespace hash_map_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = hash_map_solution::Solution;
+#endif

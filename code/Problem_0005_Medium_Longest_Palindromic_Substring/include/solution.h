@@ -1,5 +1,8 @@
 #pragma once
+
 #include <string>
+
+namespace default_solution {
 
 class Solution {
 public:
@@ -50,3 +53,9 @@ public:
         return s.substr(start, max_len);
     }
 };
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = default_solution::Solution;
+#endif

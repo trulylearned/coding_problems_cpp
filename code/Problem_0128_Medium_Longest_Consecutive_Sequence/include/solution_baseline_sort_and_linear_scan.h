@@ -1,7 +1,11 @@
 #pragma once
-// IMPORTANT: Include all necessary modules for this specific solution here.
+
 #include <vector>
 #include <algorithm> // For std::sort and std::max
+
+namespace baseline_sort_and_linear_scan_solution {
+
+// IMPORTANT: Include all necessary modules for this specific solution here.
 
 class Solution {
 private:
@@ -46,3 +50,9 @@ public:
         return best_streak;
     }
 };
+
+}  // namespace baseline_sort_and_linear_scan_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = baseline_sort_and_linear_scan_solution::Solution;
+#endif

@@ -1,7 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <limits> // Required for std::numeric_limits
+
+namespace optimal_solution {
 
 class Solution {
 public:
@@ -32,3 +35,9 @@ public:
         return max_profit_so_far;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif

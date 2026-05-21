@@ -1,44 +1,79 @@
-#include "solution.h"
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include <vector>
 
-// This is just a simple main to illustrate usage and manual testing and debugging.
-// It is not needed beyond manual debugging, that's why the code is commented out.
-//
-// To run tests do execute the following from the VS code command palette:
-// 1) CMake: Configure
-// 2) CMake: Build
-// 3) CTest: Run Tests
-//
-// After building you can also run tests from the terminal. 
-// You have to be in the 'build' directory and then run `ctest --output-on-failure`
-//
-// Alternatively you can run ctest and point it to the folder with the tests:
-// For example if you are in the root folder of the project you can run tests
-// by executing: `ctest --test-dir build --output-on-failure`
-//
-// FYI. To see the Command Palette in VS code you can use the shortcut: 
-// Shift+Cmd+P (on Mac) or Shift+Ctrl+P (on Windows).
+namespace {
 
-int main() {
-    // // --- Create an instance of the Solution class ---
-    // Solution solution;
-    //
-    // // --- Define a test vector ---
-    // std::vector<int> nums = {100, 4, 200, 1, 3, 2};
-    //
-    // // --- Call the method ---
-    // int ans = solution.longestConsecutive(nums);
-    //
-    // // --- Print the result ---
-    // // Expected output: Longest consecutive length = 4
-    // std::cout << "Longest consecutive length = " << ans << std::endl;
-    //
-    // // --- Test another case ---
-    // std::vector<int> nums_2 = {-2, 10, -1, 0, 1, 50};
-    // int ans_2 = solution.longestConsecutive(nums_2);
-    // // Expected output: Longest consecutive length = 4
-    // std::cout << "Longest consecutive length = " << ans_2 << std::endl;
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
+}
 
-    return 0;
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
+
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
+
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
+
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
+        }
+        print_value(values[i]);
+    }
+    std::cout << ']';
+}
+
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
+
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        std::vector<int> nums {100, 4, 200, 1, 3, 2};
+        const auto result = solution.longestConsecutive(nums);
+        std::cout << "nums = ";
+        print_value(nums);
+        std::cout << "\nlongest consecutive = ";
+        print_value(result);
+        std::cout << "\n";
+    });
 }

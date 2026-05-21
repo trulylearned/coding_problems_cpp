@@ -1,7 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <set> // Using a set to handle duplicate triplets easily
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -41,3 +44,9 @@ public:
         return std::vector<std::vector<int>>(result_set.begin(), result_set.end());
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

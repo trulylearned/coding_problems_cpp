@@ -1,8 +1,11 @@
 #pragma once
+
 #include <string>
 #include <unordered_map>
 #include <algorithm> // for std::max
 #include <concepts>  // for C++20 .contains()
+
+namespace optimal_hash_map_jump_solution {
 
 class Solution {
 public:
@@ -43,3 +46,9 @@ public:
         return max_length;
     }
 };
+
+}  // namespace optimal_hash_map_jump_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_hash_map_jump_solution::Solution;
+#endif

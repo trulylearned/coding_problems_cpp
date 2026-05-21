@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -27,3 +30,9 @@ public:
         return max_profit;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

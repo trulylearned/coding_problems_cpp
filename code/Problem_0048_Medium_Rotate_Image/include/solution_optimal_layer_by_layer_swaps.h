@@ -1,7 +1,11 @@
 #pragma once
-// IMPORTANT: Include all necessary modules for this specific solution here.
+
 #include <vector>
 #include <utility> // For std::swap
+
+namespace optimal_layer_by_layer_swaps_solution {
+
+// IMPORTANT: Include all necessary modules for this specific solution here.
 
 class Solution {
 private:
@@ -60,3 +64,9 @@ public:
         }
     }
 };
+
+}  // namespace optimal_layer_by_layer_swaps_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_layer_by_layer_swaps_solution::Solution;
+#endif

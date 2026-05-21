@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 #include <cctype>
 #include <algorithm>
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -31,3 +34,9 @@ public:
         return filtered_string == reversed_string;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

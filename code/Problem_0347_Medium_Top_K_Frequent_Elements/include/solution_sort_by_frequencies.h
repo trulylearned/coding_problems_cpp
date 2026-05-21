@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
 #include <utility> // For std::pair
+
+namespace sort_by_frequencies_solution {
 
 class Solution {
 public:
@@ -41,3 +44,9 @@ public:
         return result;
     }
 };
+
+}  // namespace sort_by_frequencies_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = sort_by_frequencies_solution::Solution;
+#endif

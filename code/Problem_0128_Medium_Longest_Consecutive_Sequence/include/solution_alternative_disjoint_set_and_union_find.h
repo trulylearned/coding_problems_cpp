@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <unordered_map>
 #include <numeric>     // For std::iota
 #include <algorithm>   // For std::max, std::swap
+
+namespace alternative_disjoint_set_and_union_find_solution {
 
 class Solution {
 private:
@@ -93,3 +96,9 @@ public:
         return dsu.get_max_component_size();
     }
 };
+
+}  // namespace alternative_disjoint_set_and_union_find_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = alternative_disjoint_set_and_union_find_solution::Solution;
+#endif

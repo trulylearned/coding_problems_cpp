@@ -1,7 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <limits>
+
+namespace divide_and_conquer_solution {
 
 class Solution {
 private:
@@ -62,3 +65,9 @@ public:
         return find_max_subarray_sum(nums, 0, (int)nums.size() - 1);
     }
 };
+
+}  // namespace divide_and_conquer_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = divide_and_conquer_solution::Solution;
+#endif

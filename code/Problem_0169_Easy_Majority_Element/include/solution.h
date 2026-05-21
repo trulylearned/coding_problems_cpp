@@ -1,5 +1,8 @@
 #pragma once
+
 #include <vector>
+
+namespace default_solution {
 
 class Solution {
 public:
@@ -27,3 +30,9 @@ public:
         return candidate;
     }
 };
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = default_solution::Solution;
+#endif

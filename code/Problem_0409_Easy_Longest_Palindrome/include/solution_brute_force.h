@@ -1,8 +1,11 @@
 #pragma once
+
 #include <string>
 #include <unordered_map>
 #include <algorithm> // For std::max
 #include <vector>    // Included for recursion, though not in final class
+
+namespace brute_force_solution {
 
 class Solution {
 private:
@@ -84,3 +87,9 @@ public:
         return max_len;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

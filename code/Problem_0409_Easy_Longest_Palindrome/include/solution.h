@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <unordered_set>
+
+namespace default_solution {
 
 class Solution {
 public:
@@ -41,3 +44,9 @@ public:
         }
     }
 };
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = default_solution::Solution;
+#endif

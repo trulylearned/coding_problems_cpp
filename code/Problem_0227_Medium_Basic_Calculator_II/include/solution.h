@@ -1,10 +1,11 @@
 #pragma once
+
 #include <string>
 #include <stack>
 #include <cctype>
 #include <numeric>
 
-using namespace std;
+namespace default_solution {
 
 class Solution {
 public:
@@ -15,20 +16,20 @@ public:
     // Remarks:     Truly optimal. Uses a clever trick to
     //              track the "last" value for precedence.
     /////////////////////////////////////////////////////////////////
-    int calculate(string s) {
+    int calculate(std::string s) {
         long num = 0;
         long result = 0;
         long last_num = 0; // The last number we evaluated
         char op = '+';
 
-        for (size_t i = 0; i < s.size(); ++i) {
+        for (std::size_t i = 0; i < s.size(); ++i) {
             char c = s[i];
             
-            if (isdigit(c)) {
+            if (std::isdigit(c)) {
                 num = num * 10 + (c - '0');
             }
 
-            if ((!isdigit(c) && !isspace(c)) || i == s.size() - 1) {
+            if ((!std::isdigit(c) && !std::isspace(c)) || i == s.size() - 1) {
                 if (op == '+') {
                     result += num;
                     last_num = num;
@@ -59,8 +60,14 @@ public:
         return (int)result;
     }
 
-    // You can uncomment this to test the stack-based solution
-    // int calculate(string s) {
+    // You can uncomment this to test the std::stack-based solution
+    // int calculate(std::string s) {
     //     return calculate_stack(s);
     // }
 };
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = default_solution::Solution;
+#endif

@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <array> // A more modern C++23 alternative to the vector
+
+namespace optimal_solution {
 
 class Solution {
 public:
@@ -38,3 +41,9 @@ public:
         return true;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif

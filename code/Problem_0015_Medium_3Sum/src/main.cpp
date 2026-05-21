@@ -1,54 +1,79 @@
-#include "solution.h" // Contains the Solution class
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include <vector>
 
-// To run this main function for manual testing:
-// 1. Make sure "solution.h" is in the same directory.
-// 2. Uncomment the code inside main().
-// 3. Compile and run:
-//    g++ main.cpp -o main_runner -std=c++23
-//    ./main_runner
+namespace {
 
-// To run the automated tests (recommended):
-// Use the "Run CTest" button in VS Code, or run from terminal:
-// cmake: Configure -> Build -> CTest: Run Tests
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
+}
 
-int main() {
-    /*
-    // --- Example of how to manually test your solution ---
-    
-    Solution solution;
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
 
-    // Test with Example 1
-    std::vector<int> nums = {-1, 0, 1, 2, -1, -4};
-    
-    std::cout << "Input: [-1, 0, 1, 2, -1, -4]\n";
-    auto result = solution.threeSum(nums);
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
 
-    std::cout << "Triplets summing to zero:\n";
-    if (result.empty()) {
-        std::cout << "(No triplets found)\n";
-    } else {
-        for (const auto& triplet : result) {
-            std::cout << "[";
-            for (size_t i = 0; i < triplet.size(); ++i) {
-                std::cout << triplet[i];
-                if (i + 1 < triplet.size()) {
-                    std::cout << ", ";
-                }
-            }
-            std::cout << "]\n";
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
+
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
         }
+        print_value(values[i]);
     }
-    
-    // Expected output for this example:
-    // (Order of triplets and numbers may vary)
-    // [-1, -1, 2]
-    // [-1, 0, 1]
-    */
+    std::cout << ']';
+}
 
-    std::cout << "Main function complete. Uncomment code to run manual tests.\n";
-    std::cout << "Otherwise, please run the GoogleTests.\n";
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
 
-    return 0;
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        std::vector<int> nums {-1, 0, 1, 2, -1, -4};
+        const auto result = solution.threeSum(nums);
+        std::cout << "nums = ";
+        print_value(nums);
+        std::cout << "\ntriplets = ";
+        print_value(result);
+        std::cout << "\n";
+    });
 }

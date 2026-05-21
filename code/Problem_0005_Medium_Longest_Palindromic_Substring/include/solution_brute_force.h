@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <string_view> // Use string_view for efficient checking
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -43,3 +46,9 @@ public:
         return longest_sub;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

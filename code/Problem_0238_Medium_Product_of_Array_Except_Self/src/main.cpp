@@ -1,32 +1,79 @@
-#include "solution.h"
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include <vector>
 
-// Helper function to print a vector
-void printVector(const std::string& title, const std::vector<int>& vec) {
-    std::cout << title;
-    for (int val : vec) {
-        std::cout << val << ' ';
-    }
-    std::cout << std::endl;
+namespace {
+
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
 }
 
-int main() {
-    // Solution solution;
-    //
-    // // Example 1
-    // std::vector<int> nums_example_1{1, 2, 3, 4};
-    // printVector("Input 1:  ", nums_example_1);
-    // std::vector<int> result_1 = solution.productExceptSelf(nums_example_1);
-    // printVector("Output 1: ", result_1); // Expected: 24 12 8 6
-    //
-    // std::cout << "---" << std::endl;
-    //
-    // // Example 2 (with zero)
-    // std::vector<int> nums_example_2{-1, 1, 0, -3, 3};
-    // printVector("Input 2:  ", nums_example_2);
-    // std::vector<int> result_2 = solution.productExceptSelf(nums_example_2);
-    // printVector("Output 2: ", result_2); // Expected: 0 0 9 0 0
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
 
-    return 0;
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
+
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
+
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
+        }
+        print_value(values[i]);
+    }
+    std::cout << ']';
+}
+
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
+
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        std::vector<int> nums {1, 2, 3, 4};
+        const auto result = solution.productExceptSelf(nums);
+        std::cout << "nums = ";
+        print_value(nums);
+        std::cout << "\nproduct except self = ";
+        print_value(result);
+        std::cout << "\n";
+    });
 }

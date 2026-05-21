@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <algorithm> // for std::sort
+
+namespace brute_force_sort_and_compare_solution {
 
 class Solution {
 public:
@@ -27,3 +30,9 @@ public:
         return s == t;
     }
 };
+
+}  // namespace brute_force_sort_and_compare_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_sort_and_compare_solution::Solution;
+#endif

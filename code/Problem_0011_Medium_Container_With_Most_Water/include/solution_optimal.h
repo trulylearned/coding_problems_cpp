@@ -1,7 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <cmath> // For std::min, std::max
+
+namespace optimal_solution {
 
 class Solution {
 public:
@@ -38,3 +41,9 @@ public:
         return max_area;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif

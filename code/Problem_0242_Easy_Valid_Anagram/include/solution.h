@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <array>     // Using std::array for a fixed-size counter
+
+namespace default_solution {
 
 class Solution {
 public:
@@ -46,3 +49,9 @@ public:
         return true;
     }
 };
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = default_solution::Solution;
+#endif

@@ -1,7 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <limits>
+
+namespace optimal_kadane_solution {
 
 class Solution {
 public:
@@ -32,3 +35,9 @@ public:
         return max_sum;
     }
 };
+
+}  // namespace optimal_kadane_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_kadane_solution::Solution;
+#endif

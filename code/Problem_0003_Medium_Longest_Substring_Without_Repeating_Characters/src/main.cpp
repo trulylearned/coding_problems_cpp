@@ -1,42 +1,79 @@
-#include "solution.h" // Contains the 'class Solution'
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
 #include <string>
+#include <string_view>
+#include <vector>
 
-int main() {
-    // Create an instance of the Solution class
-    // Solution sol;
-    
-    // --- Example 1 ---
-    // std::string s1 = "abcabcbb";
-    // int length1 = sol.lengthOfLongestSubstring(s1);
-    // std::cout << "Input: \"" << s1 << "\"" << std::endl;
-    // std::cout << "Length of longest substring: " << length1 << std::endl; // Expected: 3
-    
-    // --- Example 2 ---
-    // std::string s2 = "bbbbb";
-    // int length2 = sol.lengthOfLongestSubstring(s2);
-    // std::cout << "\nInput: \"" << s2 << "\"" << std::endl;
-    // std::cout << "Length of longest substring: " << length2 << std::endl; // Expected: 1
-    
-    // --- Example 3 ---
-    // std::string s3 = "pwwkew";
-    // int length3 = sol.lengthOfLongestSubstring(s3);
-    // std::cout << "\nInput: \"" << s3 << "\"" << std::endl;
-    // std::cout << "Length of longest substring: " << length3 << std::endl; // Expected: 3
+namespace {
 
-    // --- Custom Example ---
-    // std::string s4 = "dvdf";
-    // int length4 = sol.lengthOfLongestSubstring(s4);
-    // std::cout << "\nInput: \"" << s4 << "\"" << std::endl;
-    // std::cout << "Length of longest substring: " << length4 << std::endl; // Expected: 3
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
+}
 
-    // You must uncomment the lines above to run them.
-    // Make sure to compile this file with the solution.h header.
-    // Example (if using g++):
-    // g++ main.cpp -o main -std=c++23
-    // ./main
-    
-    std::cout << "Main function is set up. Uncomment examples to run." << std::endl;
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
 
-    return 0;
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
+
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
+
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
+        }
+        print_value(values[i]);
+    }
+    std::cout << ']';
+}
+
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
+
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        const std::string input {"abcabcbb"};
+        const auto result = solution.lengthOfLongestSubstring(input);
+        std::cout << "input = ";
+        print_value(input);
+        std::cout << "\nlength = ";
+        print_value(result);
+        std::cout << "\n";
+    });
 }

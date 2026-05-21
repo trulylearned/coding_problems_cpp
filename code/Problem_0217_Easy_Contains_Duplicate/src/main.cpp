@@ -1,43 +1,79 @@
-#include "solution.h"
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include <vector>
 
-// This is just a simple main to illustrate usage and manual testing/debugging.
-// It is not needed for the GoogleTest suite to run.
-//
-// To run tests from the VS Code command palette (Shift+Cmd+P or Shift+Ctrl+P):
-// 1) CMake: Configure
-// 2) CMake: Build
-// 3) CTest: Run Tests
-//
-// After building, you can also run tests from the terminal:
-// > cd build
-// > ctest --output-on-failure
+namespace {
 
-int main() {
-    // // --- Create a Solution instance ---
-    // Solution solution;
-    //
-    // // --- Example 1: Should be true ---
-    // std::vector<int> nums_1 = {1, 2, 3, 1};
-    // bool result_1 = solution.contains_duplicate(nums_1);
-    // std::cout << "Test Case 1 ([1, 2, 3, 1]): " 
-    //           << (result_1 ? "true (Correct)" : "false (Incorrect)") 
-    //           << std::endl;
-    //
-    // // --- Example 2: Should be false ---
-    // std::vector<int> nums_2 = {1, 2, 3, 4};
-    // bool result_2 = solution.contains_duplicate(nums_2);
-    // std::cout << "Test Case 2 ([1, 2, 3, 4]): " 
-    //           << (result_2 ? "true (Incorrect)" : "false (Correct)") 
-    //           << std::endl;
-    //
-    // // --- Example 3: Should be true ---
-    // std::vector<int> nums_3 = {-5, 10, 0, 10, 2};
-    // bool result_3 = solution.contains_duplicate(nums_3);
-    // std::cout << "Test Case 3 ([-5, 10, 0, 10, 2]): " 
-    //           << (result_3 ? "true (Correct)" : "false (Incorrect)") 
-    //           << std::endl;
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
+}
 
-    return 0;
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
+
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
+
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
+
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
+        }
+        print_value(values[i]);
+    }
+    std::cout << ']';
+}
+
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
+
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        std::vector<int> nums {1, 2, 3, 1};
+        const auto result = solution.contains_duplicate(nums);
+        std::cout << "nums = ";
+        print_value(nums);
+        std::cout << "\ncontains duplicate = ";
+        print_value(result);
+        std::cout << "\n";
+    });
 }

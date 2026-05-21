@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <vector>
+
+namespace dp_solution {
 
 class Solution {
 public:
@@ -62,3 +65,9 @@ public:
         return s.substr(start, max_len);
     }
 };
+
+}  // namespace dp_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = dp_solution::Solution;
+#endif

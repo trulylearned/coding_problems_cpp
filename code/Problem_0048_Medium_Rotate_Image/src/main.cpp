@@ -1,75 +1,83 @@
-#include "solution.h"
+#include "solutions.h"
+
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <string_view>
 #include <vector>
 
-// Helper to print a matrix
-void print_matrix(const std::vector<std::vector<int>>& matrix) {
-    if (matrix.empty()) {
-        std::cout << "[]\n";
-        return;
-    }
-    for (const auto& row : matrix) {
-        std::cout << "[ ";
-        for (int x : row) {
-            // Add padding for alignment
-            std::cout.width(4);
-            std::cout << x << " ";
-        }
-        std::cout << "]\n";
-    }
-    std::cout << "---------------------\n";
+namespace {
+
+[[maybe_unused]] void print_value(bool value) {
+    std::cout << std::boolalpha << value;
 }
 
-// This is just a simple main to illustrate usage and manual testing.
-// It is not needed for the tests to run.
-//
-// To run tests from the VS Code command palette:
-// 1) CMake: Configure
-// 2) CMake: Build
-// 3) CTest: Run Tests
-//
-// To run from the terminal (after building):
-// 1) cd build
-// 2) ctest --output-on-failure
+[[maybe_unused]] void print_value(char value) {
+    std::cout << value;
+}
 
-int main() {
-    // Solution solution;
+[[maybe_unused]] void print_value(int value) {
+    std::cout << value;
+}
 
-    // // Example 1 from the prompt (3x3):
-    // std::vector<std::vector<int>> matrix1{
-    //     {1, 2, 3},
-    //     {4, 5, 6},
-    //     {7, 8, 9}
-    // };
+[[maybe_unused]] void print_value(const std::string& value) {
+    std::cout << '"' << value << '"';
+}
 
-    // std::cout << "Original Matrix 1:\n";
-    // print_matrix(matrix1);
-    // solution.rotate(matrix1);
-    // std::cout << "Rotated Matrix 1:\n";
-    // print_matrix(matrix1);
-    // // Expected:
-    // // [   7    4    1 ]
-    // // [   8    5    2 ]
-    // // [   9    6    3 ]
+template <typename T>
+void print_value(const std::vector<T>& values) {
+    std::cout << '[';
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) {
+            std::cout << ", ";
+        }
+        print_value(values[i]);
+    }
+    std::cout << ']';
+}
 
-    // // Example 2 from prompt (4x4):
-    // std::vector<std::vector<int>> matrix2{
-    //     { 5,  1,  9, 11},
-    //     { 2,  4,  8, 10},
-    //     {13,  3,  6,  7},
-    //     {15, 14, 12, 16}
-    // };
-    
-    // std::cout << "Original Matrix 2:\n";
-    // print_matrix(matrix2);
-    // solution.rotate(matrix2);
-    // std::cout << "Rotated Matrix 2:\n";
-    // print_matrix(matrix2);
-    // // Expected:
-    // // [  15   13    2    5 ]
-    // // [  14    3    4    1 ]
-    // // [  12    6    8    9 ]
-    // // [  16    7   10   11 ]
+template <typename Fn>
+int run_selected_solution(int argc, char* argv[], Fn&& fn) {
+    const std::string_view selected_id = argc > 1 ? std::string_view(argv[1]) : std::string_view{};
+    bool ran_solution = false;
 
-    return 0;
+    solutions::for_each_solution([&](const solutions::SolutionInfo& solution_info,
+                                     auto solution_type) {
+        if (!selected_id.empty() && selected_id != solution_info.id) {
+            return;
+        }
+
+        ran_solution = true;
+        std::cout << "\n== " << solution_info.id << " ==\n";
+        std::cout << solution_info.method << '\n';
+        fn(solution_type);
+    });
+
+    if (!ran_solution) {
+        std::cerr << "No solution id matched '" << selected_id << "'.\n";
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+}  // namespace
+
+int main(int argc, char* argv[]) {
+    return run_selected_solution(argc, argv, [](auto solution_type) {
+        using Solution = typename decltype(solution_type)::type;
+        Solution solution;
+
+        std::vector<std::vector<int>> matrix {{
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        }};
+        std::cout << "before = ";
+        print_value(matrix);
+        solution.rotate(matrix);
+        std::cout << "\nafter = ";
+        print_value(matrix);
+        std::cout << "\n";
+    });
 }

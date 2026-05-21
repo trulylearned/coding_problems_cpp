@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <stack>
+
+namespace optimal_fast_solution {
 
 class Solution {
 private:
@@ -49,3 +52,9 @@ public:
         return open_brackets.empty();
     }
 };
+
+}  // namespace optimal_fast_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_fast_solution::Solution;
+#endif

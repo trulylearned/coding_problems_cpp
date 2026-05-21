@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <set>
 #include <unordered_set>
+
+namespace hash_set_solution {
 
 class Solution {
 public:
@@ -54,3 +57,9 @@ public:
         return std::vector<std::vector<int>>(result_set.begin(), result_set.end());
     }
 };
+
+}  // namespace hash_set_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = hash_set_solution::Solution;
+#endif

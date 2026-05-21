@@ -1,7 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <algorithm>
 #include <cmath> // For std::min, std::max
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -30,3 +33,9 @@ public:
         return max_area;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

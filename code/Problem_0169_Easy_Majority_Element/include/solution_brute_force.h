@@ -1,5 +1,8 @@
 #pragma once
+
 #include <vector>
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -31,3 +34,9 @@ public:
         return -1; // Should not be reached, as a majority element always exists.
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

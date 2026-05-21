@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include <unordered_map>
 #include <algorithm>
+
+namespace optimal_hash_map_with_sorted_key_simple_solution {
 
 class Solution {
 public:
@@ -41,3 +44,9 @@ public:
         return result;
     }
 };
+
+}  // namespace optimal_hash_map_with_sorted_key_simple_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_hash_map_with_sorted_key_simple_solution::Solution;
+#endif

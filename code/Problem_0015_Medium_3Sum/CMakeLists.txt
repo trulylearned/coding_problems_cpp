@@ -1,36 +1,59 @@
-cmake_minimum_required(VERSION 3.20)
-project(LC_Problem LANGUAGES CXX)
+# Standalone CMake project for one algorithm problem.
+# Configure this directory directly; the repo intentionally has no root aggregate build.
+cmake_minimum_required(VERSION 3.30)
 
-# ---- Make the whole project C++23 (helps IntelliSense, MSVC, etc.) ----
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+# Keep generated CMake files out of source directories.
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR
+    "In-source builds are disabled. Use: cmake -S . -B build -G Ninja")
+endif()
 
-# ----- Header-only "library" so app + tests share config -----
+# The project name is problem-specific, but every problem shares the same target layout.
+project(LC_15_3Sum LANGUAGES CXX)
+
+# Locate code/AlgoProjectOptions.cmake by walking upward from this standalone
+# problem directory. This keeps copied or nested problem projects independent.
+set(ALGO_CODE_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+while(NOT EXISTS "${ALGO_CODE_ROOT}/AlgoProjectOptions.cmake")
+  get_filename_component(ALGO_PARENT_DIR "${ALGO_CODE_ROOT}" DIRECTORY)
+  if(ALGO_PARENT_DIR STREQUAL ALGO_CODE_ROOT)
+    message(FATAL_ERROR "Could not find code/AlgoProjectOptions.cmake.")
+  endif()
+  set(ALGO_CODE_ROOT "${ALGO_PARENT_DIR}")
+endwhile()
+
+# Imports ALGO_CXX_STANDARD and ALGO_CXX_COMPILE_FEATURE.
+include("${ALGO_CODE_ROOT}/AlgoProjectOptions.cmake")
+
+# ----- Header-only interface library so app + tests share config -----
 add_library(solution_lib INTERFACE)
 target_include_directories(solution_lib INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-# Also advertise C++23 to dependents of solution_lib
-target_compile_features(solution_lib INTERFACE cxx_std_23)
 
-if (MSVC)
+# Require the selected C++ standard for both the debug app and tests.
+target_compile_features(solution_lib INTERFACE ${ALGO_CXX_COMPILE_FEATURE})
+
+# Keep compiler diagnostics consistent across app and test targets.
+if(MSVC)
   target_compile_options(solution_lib INTERFACE /W4 /permissive- /EHsc /utf-8)
-  # Report correct __cplusplus value with MSVC (useful for some libs)
   add_compile_options(/Zc:__cplusplus)
 else()
   target_compile_options(solution_lib INTERFACE -Wall -Wextra -Wpedantic)
 endif()
 
-# ----- Optional runner (delete src/main.cpp if you don't need it) -----
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+# ----- Debug runner -----
+# The app target is for local debugging and can run one or all registered solutions.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
   add_executable(app src/main.cpp)
   target_link_libraries(app PRIVATE solution_lib)
 endif()
 
-# Editor helpers + sensible default build type
+# Emit compile_commands.json for editor integration and language servers.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-if (NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+
+# Default single-config generators such as Ninja and Makefiles to Debug builds.
+if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
@@ -40,21 +63,19 @@ endif()
 include(CTest)
 enable_testing()
 
-# Verbose, color-friendly output when you run `ctest`
 set(CMAKE_CTEST_ARGUMENTS "-V --output-on-failure")
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # For MSVC runtime
-FetchContent_MakeAvailable(googletest)
+# Pull vendored GoogleTest through the repo-local alias target without network access.
+if(NOT TARGET algo::gtest_main)
+  add_subdirectory(
+    "${ALGO_CODE_ROOT}/external"
+    "${CMAKE_BINARY_DIR}/external"
+  )
+endif()
 
-# ----- Test binary (always tests/tests.cpp) -----
+# Tests include solutions.h and run every registered implementation variant.
 add_executable(problem_tests tests/tests.cpp)
-target_link_libraries(problem_tests PRIVATE solution_lib GTest::gtest_main)
+target_link_libraries(problem_tests PRIVATE solution_lib algo::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(problem_tests)

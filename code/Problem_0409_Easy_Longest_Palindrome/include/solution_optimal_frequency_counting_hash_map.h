@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 #include <unordered_map>
 #include <numeric> // For std::accumulate
+
+namespace optimal_frequency_counting_hash_map_solution {
 
 class Solution {
 public:
@@ -42,3 +45,9 @@ public:
         return length;
     }
 };
+
+}  // namespace optimal_frequency_counting_hash_map_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_frequency_counting_hash_map_solution::Solution;
+#endif

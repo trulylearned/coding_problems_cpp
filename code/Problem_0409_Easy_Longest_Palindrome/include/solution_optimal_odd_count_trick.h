@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
 #include <unordered_set>
+
+namespace optimal_odd_count_trick_solution {
 
 class Solution {
 public:
@@ -41,3 +44,9 @@ public:
         }
     }
 };
+
+}  // namespace optimal_odd_count_trick_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_odd_count_trick_solution::Solution;
+#endif

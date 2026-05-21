@@ -1,117 +1,113 @@
-# 🧩 LeetCode C++ Solutions — Cross-Platform, VS Code Friendly
+# LeetCode C++ Solutions
 
-> 🎥 **Video explanations available:** Each solution in this repository is accompanied by a detailed walkthrough on my YouTube channel — [@TrulyLearnedMe](https://www.youtube.com/@TrulyLearnedMe).
-> The videos focus on reasoning, trade-offs, and clean Modern C++ implementation.
+This repo contains small, standalone C++ projects for LeetCode-style problem
+solving. Each problem directory under `code/` owns its own CMake project,
+debug app, solution headers, and GoogleTest suite.
 
-A fully reproducible Modern C++ project template for solving and testing **LeetCode problems**.
-All problem directories are stored under the top-level **`code/`** folder, each following an identical structure designed for clarity, testing, and IDE integration.
+The `code/` directory itself is shared infrastructure, not an aggregate CMake
+project. Open, configure, build, and test one problem folder at a time.
 
----
+## Layout
 
-## 📁 Repository Structure
-
-```
+```text
 code/
- ├── 0001_LC_1_Easy_Two_Sum/
- │    ├── .vscode/
- │    │    ├── c_cpp_properties.json
- │    │    ├── launch.json
- │    │    ├── settings.json
- │    │    └── tasks.json
- │    ├── include/
- │    │    ├── solution.h                 # Primary, tested solution
- │    │    ├── solution_brute_force.h     # Alternative approach
- │    │    └── solution_optimal.h         # Alternative approach
- │    ├── src/
- │    │    └── main.cpp                   # Optional demo entry point
- │    ├── tests/
- │    │    └── tests.cpp                  # GoogleTest unit tests
- │    └── CMakeLists.txt
- ├── 0002_LC_20_Easy_Valid_Parentheses/
- │    └── ...
- └── ...
+  AlgoProjectOptions.cmake
+  external/
+    CMakeLists.txt
+    googletest/
+      UPSTREAM.md
+      upstream/
+  templates/
+    problem_project/
+  test_cmake/
+  Problem_0001_Easy_Two_Sum/
+    .vscode/
+    CMakeLists.txt
+    include/
+      solution.h
+      solution_brute_force.h
+      solution_optimal.h
+      solutions.h
+    src/main.cpp
+    tests/tests.cpp
 ```
 
-* Every folder inside `code/` is independent and self-contained.
-* Alternative solutions follow the naming pattern `solution_<description>.h`.
-* `main.cpp` is only for manual debugging; automated tests are run via GoogleTest.
+Each problem remains independent. Shared CMake code is discovered by walking
+upward from the problem folder until `code/AlgoProjectOptions.cmake` is found.
 
----
+## Build And Test One Problem
 
-## ⚙️ Toolchain & Compatibility
-
-*(Tested with C++23 — fully compatible with C++20)*
-
-| Platform       | Compiler    | C++ Standard    | Status |
-| -------------- | ----------- | --------------- | ------ |
-| macOS 14 +     | Clang 17 +  | C++23 (✓ C++20) | ✅      |
-| Windows 11     | MSVC 2022 + | C++23 (✓ C++20) | ✅      |
-| Ubuntu 24.04 + | GCC 15 +    | C++23 (✓ C++20) | ✅      |
-
-All builds use strict warnings (`-Wall -Wextra -Wpedantic` or `/W4`) and contain no platform-specific code.
-The same project compiles cleanly and behaves identically across macOS, Windows, and Linux.
-
----
-
-## 🧪 Testing with GoogleTest
-
-Each problem folder contains its own test suite (`tests/tests.cpp`).
-GoogleTest is automatically fetched by CMake.
-
-Build and run tests:
+From a problem directory, for example `code/Problem_0001_Easy_Two_Sum`:
 
 ```bash
-cmake -S . -B build
+cmake -S . -B build -G Ninja
 cmake --build build
-cd build
-ctest --output-on-failure
+ctest --test-dir build --output-on-failure
+./build/app
+./build/app optimal
 ```
 
----
+The app target is a small debug runner. With no argument it runs every registered
+solution variant. With a solution id argument, it runs only that variant.
 
-## 💻 Recommended IDE Setup (Visual Studio Code)
+## C++ Standard
 
-1. Install the following extensions:
+The shared CMake option is `ALGO_CXX_STANDARD`. The current default is C++23.
 
-   * **C/C++** (Microsoft)
-   * **CMake Tools**
-   * **CTest Adapter** (optional)
-2. Open the problem folder (e.g., `code/0001_LC_1_Easy_Two_Sum`) as a VS Code workspace.
-3. Configure with CMake (`Ctrl + Shift + P → CMake: Configure`).
-4. Run or debug either:
+Allowed values:
 
-   * the dummy `app` target (for quick manual runs), or
-   * the `problem_tests` target (for unit testing).
+- `20`
+- `23`
+- `26`
 
-All `.vscode/*.json` files are pre-configured for convenient IntelliSense, build, and debugging.
+Default: `23`.
 
----
+Override the standard for one build directory:
 
-## 🧠 Design Notes
+```bash
+cmake -S . -B build -DALGO_CXX_STANDARD=26
+```
 
-* Each problem defines a small **`solution_lib`** (INTERFACE library) so headers can be shared between the runner and tests.
+Change the repo-wide default by editing this line in
+`code/AlgoProjectOptions.cmake`:
 
-  * This library is header-only — it doesn’t compile code itself.
-  * It simply exports include paths, C++ standard settings, and compiler flags to any target that links against it.
-  * Both the executable (`app`) and the test binary (`problem_tests`) link to this same library, ensuring consistent configuration and zero duplication.
-* CMake enables `CTest` and registers all GoogleTests automatically.
-* Every solution header documents algorithmic complexity and design remarks.
+```cmake
+set(ALGO_CXX_STANDARD "23" CACHE STRING "C++ standard for standalone algorithm projects")
+```
 
----
+CMake caches this value per build directory. If a `build/` directory already
+exists, reconfigure it with `-DALGO_CXX_STANDARD=<20|23|26>` or recreate the
+build directory after changing the repo-wide default.
 
-## 🧰 Extending the Repository
+## GoogleTest
 
-To add a new problem:
+GoogleTest is vendored once under `code/external/googletest/upstream/` and
+exposed to problem projects as `algo::gtest_main`. Problem projects should not
+use `FetchContent` to download GoogleTest.
 
-1. Duplicate any existing numbered folder inside `code/`.
-2. Update the name and `CMakeLists.txt` `project()` line.
-3. Replace contents of `include/solution.h` and adjust `tests/tests.cpp`.
-4. Re-run CMake and tests.
+## Solution Organization
 
-Optionally, a root-level `CMakeLists.txt` can be created to include all subprojects in the `code/` folder automatically.
+Each concrete solution header keeps the global `Solution` alias when included
+directly. When `include/solutions.h` includes all variants together, it
+suppresses those global aliases and refers to the namespaced classes instead.
 
----
+Examples:
 
-## 📜 License
+- `solution.h` -> `default_solution::Solution`
+- `solution_brute_force.h` -> `brute_force_solution::Solution`
+- `solution_optimal.h` -> `optimal_solution::Solution`
 
-MIT — free to fork, learn from, and adapt.
+Tests use `solutions::for_each_solution` so the same cases run against every
+registered variant. Slow brute-force variants skip stress-shaped tests.
+
+## Adding A Problem
+
+Copy `code/templates/problem_project/` into `code/`, rename the folder, replace
+all placeholders, and keep the same standalone CMake structure.
+
+Do not add a root-level aggregate `CMakeLists.txt` just to build every problem.
+For broad validation, iterate over the standalone problem folders.
+
+## License
+
+MIT - free to fork, learn from, and adapt.

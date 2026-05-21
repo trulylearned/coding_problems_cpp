@@ -1,10 +1,11 @@
 #pragma once
+
 #include <string>
 #include <stack>
 #include <cctype>
 #include <numeric> // For std::accumulate
 
-using namespace std;
+namespace stack_based_solution {
 
 class Solution {
 public:
@@ -15,21 +16,21 @@ public:
     // Remarks:     Good, intuitive solution that correctly
     //              handles operator precedence.
     /////////////////////////////////////////////////////////////////
-    int calculate_stack(string s) {
-        stack<int> st;
+    int calculate_stack(std::string s) {
+        std::stack<int> st;
         long num = 0;
         char op = '+';
 
-        for (size_t i = 0; i < s.size(); ++i) {
+        for (std::size_t i = 0; i < s.size(); ++i) {
             char c = s[i];
             
-            if (isdigit(c)) {
+            if (std::isdigit(c)) {
                 num = num * 10 + (c - '0');
             }
             
             // Process the previous (num, op) pair when we hit
-            // a new operator OR the end of the string.
-            if ((!isdigit(c) && !isspace(c)) || i == s.size() - 1) {
+            // a new operator OR the end of the std::string.
+            if ((!std::isdigit(c) && !std::isspace(c)) || i == s.size() - 1) {
                 if (op == '+') {
                     st.push(num);
                 } else if (op == '-') {
@@ -58,7 +59,13 @@ public:
     }
     
     // Helper to call the method we want to test
-    int calculate(string s) {
+    int calculate(std::string s) {
         return calculate_stack(s);
     }
 };
+
+}  // namespace stack_based_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = stack_based_solution::Solution;
+#endif

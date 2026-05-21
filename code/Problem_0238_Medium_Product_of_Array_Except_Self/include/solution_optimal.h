@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <numeric>
+
+namespace optimal_solution {
 
 class Solution {
 public:
@@ -36,3 +39,9 @@ public:
         return ans;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif

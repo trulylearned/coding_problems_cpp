@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <unordered_map>
 #include <queue> // For std::priority_queue
 #include <utility> // For std::pair
+
+namespace min_heap_solution {
 
 class Solution {
 public:
@@ -55,3 +58,9 @@ public:
         return result;
     }
 };
+
+}  // namespace min_heap_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = min_heap_solution::Solution;
+#endif

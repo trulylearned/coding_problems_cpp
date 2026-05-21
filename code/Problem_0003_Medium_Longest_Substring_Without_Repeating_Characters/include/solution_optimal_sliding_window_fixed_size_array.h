@@ -1,7 +1,10 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <algorithm> // for std::max
+
+namespace optimal_sliding_window_fixed_size_array_solution {
 
 class Solution {
 public:
@@ -38,3 +41,9 @@ public:
         return max_length;
     }
 };
+
+}  // namespace optimal_sliding_window_fixed_size_array_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_sliding_window_fixed_size_array_solution::Solution;
+#endif

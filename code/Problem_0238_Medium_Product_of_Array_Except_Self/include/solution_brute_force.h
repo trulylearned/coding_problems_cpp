@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <numeric> // Not used here, but good to include for numeric ops
+
+namespace brute_force_solution {
 
 class Solution {
 public:
@@ -29,3 +32,9 @@ public:
         return ans;
     }
 };
+
+}  // namespace brute_force_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = brute_force_solution::Solution;
+#endif

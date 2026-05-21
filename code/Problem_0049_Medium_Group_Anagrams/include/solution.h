@@ -1,8 +1,11 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include <unordered_map>
 #include <array> // For std::array
+
+namespace default_solution {
 
 class Solution {
 public:
@@ -52,3 +55,9 @@ public:
         return result;
     }
 };
+
+}  // namespace default_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = default_solution::Solution;
+#endif

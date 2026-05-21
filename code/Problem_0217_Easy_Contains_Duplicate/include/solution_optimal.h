@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <unordered_set> // Required for std::unordered_set
+
+namespace optimal_solution {
 
 class Solution {
 public:
@@ -27,3 +30,9 @@ public:
         return false;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif

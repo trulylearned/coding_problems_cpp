@@ -1,6 +1,9 @@
 #pragma once
+
 #include <vector>
 #include <array> // For std::array
+
+namespace optimal_solution {
 
 class Solution {
 private:
@@ -49,3 +52,9 @@ public:
         return true;
     }
 };
+
+}  // namespace optimal_solution
+
+#ifndef ALGO_SUPPRESS_GLOBAL_SOLUTION_ALIAS
+using Solution = optimal_solution::Solution;
+#endif
